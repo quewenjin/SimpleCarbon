@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sc.dao.FriendSystemDao">
+
+    <select id="getFriendIdsByUserId" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT friendId
+        FROM friend_system
+        WHERE userId = #{userId}
+    </select>
+
+    <insert id="creatRelationship" parameterType="com.sc.entity.FriendSystem">
+        INSERT INTO friend_system(userId, friendId)
+        VALUES (#{userId}, #{friendId})
+    </insert>
+
+    <select id="getByUAndF" resultType="com.sc.entity.FriendSystem">
+        select * from friend_system where 1 = 1
+        <if test = "userId != null"> and userId = #{userId}</if>
+        <if test = "friendId != null"> and friendId = #{friendId}</if>
+    </select>
+
+</mapper>

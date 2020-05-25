@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/src/main/java/com/sc/mapper/ExchangeRecordMapper.xml" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/sc/mapper/FriendSystemMapper.xml" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/sc/mapper/ScoreRecordMapper.xml" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/sc/mapper/TrendMapper.xml" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/sc/mapper/UserMapper.xml" dialect="GenericSQL" />
+  </component>
+</project>
