@@ -6,30 +6,33 @@ import com.sc.service.ScoreRecordService;
 import com.sc.service.UserService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 @RestController
 public class LoginController extends BaseController{
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private ScoreRecordService scoreRecordService;
+    private final UserService userService;
+    private final ScoreRecordService scoreRecordService;
+
+    public LoginController(UserService userService, ScoreRecordService scoreRecordService) {
+        this.userService = userService;
+        this.scoreRecordService = scoreRecordService;
+    }
 
     /**
      * 登录验证 *
-     * @param id 账号
-     * @param password 密码
+     * @param params 账号 + 密码
      */
-    @RequestMapping(value = "/login", produces = "text/plain;charset=utf-8")
-    public String LoginVerify(String id, String password){
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public String LoginVerify(@RequestBody Map<String, Object> params){
+        String id = params.get("id").toString();
+        String password = params.get("password").toString();
+
         JSONObject json = new JSONObject();
         List<User> users = userService.getUsersByIAndP(id, password);//账号+密码
         if (users.size() == 0){
@@ -94,12 +97,14 @@ public class LoginController extends BaseController{
 
     /**
      * 注册 *
-     * @param id
-     * @param password
+     * @param params 账号 + 密码
      * @return
      */
-    @RequestMapping(value = "/register", produces = "text/plain;charset=utf-8")
-    public String Register(@Param("id") String id, @Param("password") String password){
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public String Register(@RequestBody Map<String, Object> params){
+        String id = params.get("id").toString();
+        String password = params.get("password").toString();
+
         //创建JSONobject实例
         JSONObject json = new JSONObject();
         List<User> users = userService.getUsersByUserId(id);

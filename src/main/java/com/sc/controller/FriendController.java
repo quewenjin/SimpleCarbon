@@ -6,28 +6,36 @@ import com.sc.entity.FriendSystem;
 import com.sc.entity.User;
 import com.sc.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class FriendController extends BaseController{
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private FriendSystemService friendSystemService;
-    @Autowired
-    private TrendService trendService;
+    private final UserService userService;
+    private final FriendSystemService friendSystemService;
+    private final TrendService trendService;
+
+    public FriendController(UserService userService, FriendSystemService friendSystemService, TrendService trendService) {
+        this.userService = userService;
+        this.friendSystemService = friendSystemService;
+        this.trendService = trendService;
+    }
 
     /**
      * 关注 *
-     * @param userId
-     * @param friendId
-     * @return
+     * @param params 用户账号 + 好友账号
+     * @return 是否成功
      */
-    @RequestMapping(value = "/followSomeone", produces = "text/plain;charset=utf-8")
-    public String followSomeone(String userId, String friendId){
+    @RequestMapping(value = "/followSomeone", method = RequestMethod.POST)
+    public String followSomeone(@RequestBody Map<String, Object> params){
+        String userId = params.get("userId").toString();
+        String friendId = params.get("friendId").toString();
+
         JSONObject json = new JSONObject();
         FriendSystem theRelation = friendSystemService.getByUAndF(userId, friendId);
         if (theRelation == null){
@@ -36,17 +44,18 @@ public class FriendController extends BaseController{
         } else {
             json.put("state", "0");
         }
-        String strJsont = json.toString();
-        return strJsont;
+        return json.toString();
     }
 
     /**
      * 得到好友列表 *
-     * @param id
-     * @return
+     * @param params 用户账号
+     * @return 名字 + 他的积分 + 是否关注 + 头像 + 他的账号
      */
-    @RequestMapping(value = "/getFriends", produces = "text/plain;charset=utf-8")
-    public String getFriends(String id){
+    @RequestMapping(value = "/getFriends", method = RequestMethod.POST)
+    public String getFriends(@RequestBody Map<String, Object> params){
+        String id = params.get("id").toString();
+
         //创建JSONArray实例
         JSONArray jsonArray = new JSONArray();
         List<String> friendIds = friendSystemService.getFriendIdsByUserId(id);
@@ -66,19 +75,19 @@ public class FriendController extends BaseController{
                 jsonArray.add(jo);
             }
         }
-        String json = jsonArray.toString();
-        return json;
+        return jsonArray.toString();
     }
 
     /**
      * 好友动态 *
-     * @param id
-     * @return
+     * @param params 用户账号
+     * @return 好友名字 + 好友分数 + 是否关注 + 好友头像 + 好友账号 + 好友个性签名 + url + 动态图片
      */
-    @RequestMapping(value = "/SocialUpdates", produces = "text/plain;charset=utf-8")
-    public String SocialUpdates(String id){
+    @RequestMapping(value = "/SocialUpdates", method = RequestMethod.POST)
+    public String SocialUpdates(@RequestBody Map<String, Object> params){
+        String id = params.get("id").toString();
 
-        String theTrend = "123456789";//无动态时的默认图片
+        String theTrend = "https://pic.downk.cc/item/5ec11edec2a9a83be5513c45.jpg";//无动态时的默认图片
 
         JSONArray theAll = new JSONArray();
         List<String> friendIds = friendSystemService.getFriendIdsByUserId(id);
@@ -115,8 +124,7 @@ public class FriendController extends BaseController{
                 theAll.add(json);
             }
         }
-        String strJsont = theAll.toString();
-        return strJsont;
+        return theAll.toString();
     }
 
 }

@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.sc.dao.ExchangeRecordDao">
+<mapper namespace="com.sc.mapper.ExchangeRecordMapper">
 
     <insert id="creatExchangeRecord">
         INSERT INTO exchange_record(productName, productNum, exchangerId, exchangeTime)

@@ -17,10 +17,10 @@ public class MySQLUtil {
     public static void conn() {
 //        String URL = "jdbc:mysql://47.92.202.164:3306/simple_carbon" +
 //                "?useUnicode=true&useJDBCCompliantTimezoneShift=true&serverTimezone=UTC&characterEncoding=utf8";
-        String URL ="jdbc:mysql://localhost:3306/simple_carbon?useUnicode=true&useJDBCCompliantTimezoneShift=true&serverTimezone=UTC&characterEncoding=utf8";
+        String URL ="jdbc:mysql://rm-2zeizy1ina321ws4k6o.mysql.rds.aliyuncs.com:3306/simple_carbon?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai";
 
-        String USER = "root";
-        String PASSWORD = "Qwj1605260500";
+        String USER = "test1";
+        String PASSWORD = "jews2i9@djo95";
         // 1.加载驱动程序
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");

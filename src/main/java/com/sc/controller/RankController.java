@@ -4,33 +4,34 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.sc.entity.User;
 import com.sc.service.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class RankController {
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private ExchangeRecordService exchangeRecordService;
-    @Autowired
-    private FriendSystemService friendSystemService;
-    @Autowired
-    private ProductService productService;
-    @Autowired
-    private ScoreRecordService scoreRecordService;
-    @Autowired
-    private TrendService trendService;
+    private final UserService userService;
+    private final FriendSystemService friendSystemService;
+    private final TrendService trendService;
+
+    public RankController(UserService userService, FriendSystemService friendSystemService, TrendService trendService) {
+        this.userService = userService;
+        this.friendSystemService = friendSystemService;
+        this.trendService = trendService;
+    }
 
     /**
      * 全国前10 *
-     * @return
+     * @param params 用户账号
+     * @return 排名 + 名字 + 积分 + 是否关注 + 头像 + 账号 + 个性签名 + url + 动态图片
      */
-    @RequestMapping(value = "/countryTop10", produces = "text/plain;charset=utf-8")
-    public String getCountryTop10(String id){
+    @RequestMapping(value = "/countryTop10", method = RequestMethod.POST)
+    public String getCountryTop10(@RequestBody Map<String, Object> params){
+        String id = params.get("id").toString();
 
         String theTrend = "https://pic.downk.cc/item/5ec11c15c2a9a83be54e521b.jpg";//无动态时的默认图片
 
@@ -86,16 +87,17 @@ public class RankController {
                 userService.setFriendIdById(friendId, instead);
             }
         }
-        String json = jsonArray.toString();
-        return json;
+        return jsonArray.toString();
     }
 
     /**
      * 全国前10 *
-     * @return
+     * @param params 用户账号
+     * @return 排名 + 名字 + 积分 + 是否关注 + 头像 + 账号 + 个性签名 + url + 动态图片
      */
-    @RequestMapping(value = "/cityTop10", produces = "text/plain;charset=utf-8")
-    public String getCityTop10(String id){
+    @RequestMapping(value = "/cityTop10", method = RequestMethod.POST)
+    public String getCityTop10(@RequestBody Map<String, Object> params){
+        String id = params.get("id").toString();
 
         String theTrend = "https://pic.downk.cc/item/5ec11c15c2a9a83be54e521b.jpg";//无动态时的默认图片
 
@@ -155,16 +157,17 @@ public class RankController {
                 userService.setFriendIdById(friendId, instead);
             }
         }
-        String json = jsonArray.toString();
-        return json;
+        return jsonArray.toString();
     }
 
     /**
      * 好友前10 *
-     * @return
+     * @param params 用户账号
+     * @return 排名 + 名字 + 积分 + 是否关注 + 头像 + 账号 + 个性签名 + url + 动态图片
      */
-    @RequestMapping(value = "/friendTop10", produces = "text/plain;charset=utf-8")
-    public String getFriendTop10(String id){
+    @RequestMapping(value = "/friendTop10", method = RequestMethod.POST)
+    public String getFriendTop10(@RequestBody Map<String, Object> params){
+        String id = params.get("id").toString();
 
         String theTrend = "https://pic.downk.cc/item/5ec11c15c2a9a83be54e521b.jpg";//无动态时的默认图片
 
@@ -216,7 +219,7 @@ public class RankController {
                 userService.setFriendIdById(friendId, instead);
             }
         }
-        String json = jsonArray.toString();
-        return json;
+        return jsonArray.toString();
     }
+
 }

@@ -5,37 +5,37 @@ import com.alibaba.fastjson.JSONObject;
 import com.sc.entity.ScoreRecord;
 import com.sc.entity.User;
 import com.sc.service.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class UserController extends BaseController{
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private ExchangeRecordService exchangeRecordService;
-    @Autowired
-    private FriendSystemService friendSystemService;
-    @Autowired
-    private ProductService productService;
-    @Autowired
-    private ScoreRecordService scoreRecordService;
-    @Autowired
-    private TrendService trendService;
+    private final UserService userService;
+    private final ScoreRecordService scoreRecordService;
+    private final TrendService trendService;
+
+    public UserController(UserService userService, ScoreRecordService scoreRecordService, TrendService trendService) {
+        this.userService = userService;
+        this.scoreRecordService = scoreRecordService;
+        this.trendService = trendService;
+    }
 
     /**
      * 今日积分数据 *
-     * @param id
-     * @return
+     * @param params 用户账号
+     * @return 是否成功得到数据 + 积分 + 余额 + 今日数据 + 今日目标 + url + 动态
      */
-    @RequestMapping(value = "/ScoreData", produces = "text/plain;charset=utf-8")
-    public String Test(String id){
+    @RequestMapping(value = "/ScoreData", method = RequestMethod.POST)
+    public String Test(@RequestBody Map<String, Object> params){
+        String id = params.get("id").toString();
 
         String theTrend = "https://pic.downk.cc/item/5ec11c15c2a9a83be54e521b.jpg";//无动态时的默认图片
 
@@ -71,18 +71,19 @@ public class UserController extends BaseController{
                 json.put("images", jsonArray);
             }
         }
-        String strJsont = json.toString();
-        return strJsont;
+        return json.toString();
     }
 
     /**
      * 查询某用户某天的积分记录 *
-     * @param id
-     * @param date
-     * @return
+     * @param params 用户账号 + 某天的日期（yyyy-MM-dd）
+     * @return 积分变化时间 + 积分变化类型 + 积分数量
      */
-    @RequestMapping(value = "/getScoreForDay", produces = "text/plain;charset=utf-8")
-    public String getScoreForDay(String id, String date){
+    @RequestMapping(value = "/getScoreForDay", method = RequestMethod.POST)
+    public String getScoreForDay(@RequestBody Map<String, Object> params){
+        String id = params.get("id").toString();
+        String date = params.get("date").toString();
+
         //创建JSONArray实例
         JSONArray jsonArray = new JSONArray();
         List<ScoreRecord> scoreRecords = scoreRecordService.checkScoreForDay(id, date);
@@ -99,19 +100,18 @@ public class UserController extends BaseController{
                 jsonArray.add(jo);
             }
         }
-
-        String json = jsonArray.toString();
-        System.out.println(json);
-        return json;
+        return jsonArray.toString();
     }
 
     /**
      * 查询某用户本日的积分记录 *
-     * @param id
-     * @return
+     * @param params 用户账号
+     * @return 积分变化时间 + 积分变化类型 + 积分数量
      */
-    @RequestMapping(value = "/getScoreForToday", produces = "text/plain;charset=utf-8")
-    public String getScoreForToday(String id){
+    @RequestMapping(value = "/getScoreForToday", method = RequestMethod.POST)
+    public String getScoreForToday(@RequestBody Map<String, Object> params){
+        String id = params.get("id").toString();
+
         //创建JSONArray实例
         JSONArray jsonArray = new JSONArray();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
@@ -130,18 +130,18 @@ public class UserController extends BaseController{
                 jsonArray.add(jo);
             }
         }
-        String json = jsonArray.toString();
-        System.out.println(json);
-        return json;
+        return jsonArray.toString();
     }
 
     /**
      * 查询某用户本周的积分记录 *
-     * @param id
-     * @return
+     * @param params 用户账号
+     * @return 积分变化时间 + 积分变化类型 + 积分数量
      */
-    @RequestMapping(value = "/getScoreForWeek", produces = "text/plain;charset=utf-8")
-    public String getScoreForWeek(String id){
+    @RequestMapping(value = "/getScoreForWeek", method = RequestMethod.POST)
+    public String getScoreForWeek(@RequestBody Map<String, Object> params){
+        String id = params.get("id").toString();
+
         //创建JSONArray实例
         JSONArray jsonArray = new JSONArray();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
@@ -195,18 +195,18 @@ public class UserController extends BaseController{
                 jsonArray.add(jo);
             }
         }
-        String json = jsonArray.toString();
-        System.out.println(json);
-        return json;
+        return jsonArray.toString();
     }
 
     /**
      * 查询某用户本月的积分记录 *
-     * @param id
-     * @return
+     * @param params 用户账号
+     * @return 积分变化时间 + 积分变化类型 + 积分数量
      */
-    @RequestMapping(value = "/getScoreForMonth", produces = "text/plain;charset=utf-8")
-    public String getScoreForMonth(String id){
+    @RequestMapping(value = "/getScoreForMonth", method = RequestMethod.POST)
+    public String getScoreForMonth(@RequestBody Map<String, Object> params){
+        String id = params.get("id").toString();
+
         //创建JSONArray实例
         JSONArray jsonArray = new JSONArray();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
@@ -251,9 +251,6 @@ public class UserController extends BaseController{
                 jsonArray.add(jo);
             }
         }
-        String json = jsonArray.toString();
-        System.out.println(json);
-        return json;
+        return jsonArray.toString();
     }
-
 }
